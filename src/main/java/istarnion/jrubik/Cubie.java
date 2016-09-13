@@ -1,6 +1,7 @@
 package istarnion.jrubik;
 
 import com.jogamp.opengl.GL2;
+import java.util.Arrays;
 
 /**
  *
@@ -32,7 +33,7 @@ public class Cubie {
             left,
             down,
             up;
-    
+        
     public Cubie() {
         right = SIDE_COLORS[RED];
         front = SIDE_COLORS[GREEN];
@@ -82,5 +83,81 @@ public class Cubie {
             gl.glVertex3f( 0.5f, 0.5f, -0.5f);
         }
         gl.glEnd();
+    }
+    
+    public void copy(Cubie other) {
+        right = Arrays.copyOf(other.right, 3);
+        front = Arrays.copyOf(other.front, 3);
+        left  = Arrays.copyOf(other.left , 3);
+        back  = Arrays.copyOf(other.back , 3);
+        up    = Arrays.copyOf(other.up   , 3);
+        down  = Arrays.copyOf(other.down , 3);
+    }
+    
+    // Note that 'clockwise' here is seen from front, top, or right face,
+    // corresponding to roll, yaw and pitch.
+    public void swapAndRotate(Cubie other, Rotation rot, boolean clockwise) {
+        switch(rot) {
+            case YAW:   // up and down are unchanged
+                if(clockwise) {
+                    right = Arrays.copyOf(other.back , 3);
+                    front = Arrays.copyOf(other.right, 3);
+                    left  = Arrays.copyOf(other.front, 3);
+                    back  = Arrays.copyOf(other.left , 3);
+                    up    = Arrays.copyOf(other.up   , 3);
+                    down  = Arrays.copyOf(other.down , 3);
+                }
+                else {
+                    right = Arrays.copyOf(other.front, 3);
+                    front = Arrays.copyOf(other.left , 3);
+                    left  = Arrays.copyOf(other.back , 3);
+                    back  = Arrays.copyOf(other.right, 3);
+                    up    = Arrays.copyOf(other.up   , 3);
+                    down  = Arrays.copyOf(other.down , 3);
+                }
+                break;
+            case PITCH: // right and left are unchanged
+                if(clockwise) {
+                    right = Arrays.copyOf(other.right, 3);
+                    front = Arrays.copyOf(other.down , 3);
+                    left  = Arrays.copyOf(other.left , 3);
+                    back  = Arrays.copyOf(other.up   , 3);
+                    up    = Arrays.copyOf(other.front, 3);
+                    down  = Arrays.copyOf(other.back , 3);
+                }
+                else {
+                    right = Arrays.copyOf(other.right, 3);
+                    front = Arrays.copyOf(other.up   , 3);
+                    left  = Arrays.copyOf(other.left , 3);
+                    back  = Arrays.copyOf(other.down , 3);
+                    up    = Arrays.copyOf(other.back , 3);
+                    down  = Arrays.copyOf(other.front, 3);
+                }
+                break;
+            case ROLL:  // front and back are unchanged
+                if(clockwise) {
+                    right = Arrays.copyOf(other.up   , 3);
+                    front = Arrays.copyOf(other.front, 3);
+                    left  = Arrays.copyOf(other.down , 3);
+                    back  = Arrays.copyOf(other.back , 3);
+                    up    = Arrays.copyOf(other.left , 3);
+                    down  = Arrays.copyOf(other.right, 3);
+                }
+                else {
+                    right = Arrays.copyOf(other.down , 3);
+                    front = Arrays.copyOf(other.front, 3);
+                    left  = Arrays.copyOf(other.up   , 3);
+                    back  = Arrays.copyOf(other.back , 3);
+                    up    = Arrays.copyOf(other.right, 3);
+                    down  = Arrays.copyOf(other.left , 3);
+                }
+                break;
+        }
+    }
+    
+    public enum Rotation {
+        YAW,
+        PITCH,
+        ROLL
     }
 }
