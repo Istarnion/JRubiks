@@ -1,15 +1,18 @@
 package istarnion.jrubik;
 
+import com.jogamp.opengl.glu.GLU;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.regex.Pattern;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class JRubik {
+public class JRubik implements MouseMotionListener {
 	
     JFrame window;
     OpenGLRenderer renderer;
@@ -27,6 +30,7 @@ public class JRubik {
         
         renderer.rubikscube = cube;
         renderer.setPreferredSize(new Dimension(512, 512));
+        renderer.addMouseMotionListener(this);
         
         inputPanel.setLayout(new BorderLayout());
         inputPanel.add(inputField, BorderLayout.CENTER);
@@ -76,6 +80,21 @@ public class JRubik {
         while(window.isVisible()) {
             renderer.display();
         }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        float x = (2.0f * e.getX()) / 512 - 1.0f;
+        float y = 1.0f - (2.0f * e.getY()) / 512;
+        float z = 10;
+        
+        cube.mousex = x*0.2f;
+        cube.mousey = y*0.2f;
+        cube.mousez = z;        
     }
     
     public static void main(String[] args) {

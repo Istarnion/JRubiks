@@ -21,7 +21,8 @@ public class RubiksCube {
     public void draw(GL2 gl) {
         gl.glPushMatrix();
         
-        
+        gl.glRotated(1024*Math.atan(mousex/10),  0, 1, 0);
+        gl.glRotated(1024*Math.atan(mousey/10), -1, 0, 0);
         
         for(float x=-1; x<=1; ++x) {
             for(float y=-1; y<=1; ++y) {
